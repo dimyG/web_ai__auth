@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -141,17 +142,26 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         # It gets the jwt from the request cookie
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# DJ_REST_AUTH
+# DJ_REST_AUTH settings
 REST_USE_JWT = True
 # these settings cause dj-rest-auth to return a Set-Cookie header to set the JWT cookies
 # Set-Cookie: auth_prj_jwt_cookie=xxxxxxxxxxxxx; expires=Sat, 28 Mar 2020 18:59:00 GMT; HttpOnly; Max-Age=300; Path=/
 JWT_AUTH_COOKIE = 'auth_prj_jwt_cookie'
 JWT_AUTH_REFRESH_COOKIE = 'auth_prj_refresh_jwt_cookie'
 
-# SIMPLE_JWT
-ACCESS_TOKEN_LIFETIME= timedelta(minutes=5)
-REFRESH_TOKEN_LIFETIME= timedelta(days=1)
+# SIMPLE_JWT settings
+ACCESS_TOKEN_LIFETIME = timedelta(minutes=5)
+REFRESH_TOKEN_LIFETIME = timedelta(days=1)
+
+# drf-spectacular settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Auth API',
+    'DESCRIPTION': 'Authentication and Authorization API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 

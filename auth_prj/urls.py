@@ -17,11 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView
+    # TokenRefreshView,
+    # TokenVerifyView
 )
 from django.views import debug
-
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 urlpatterns = [
     path('', debug.default_urlconf),
@@ -34,4 +34,11 @@ urlpatterns = [
     # the refresh and verify endpoints are included in the dj_rest_auth urls by default if setting REST_USE_JWT is True
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    # it serves a yaml file with the schema of the API
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
 ]
