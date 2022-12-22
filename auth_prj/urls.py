@@ -14,8 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
+from django.views import debug
+
 
 urlpatterns = [
+    path('', debug.default_urlconf),
     path('admin/', admin.site.urls),
+    # I use the api/auth/ in front of /token/ to have all endpoints under /api/auth/
+    # This path though, is not included in the dj_rest_auth.urls so, I add it in front it to be matched first
+    path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
+    # the refresh and verify endpoints are included in the dj_rest_auth urls by default if setting REST_USE_JWT is True
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]

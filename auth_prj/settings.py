@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from django.conf import settings
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework'
+    'django.contrib.sites',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +132,26 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SITE_ID = 1
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # It gets the jwt from the request header
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # It gets the jwt from the request cookie
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    )
+}
+
+# DJ_REST_AUTH
+REST_USE_JWT = True
+# these settings cause dj-rest-auth to return a Set-Cookie header to set the JWT cookies
+# Set-Cookie: auth_prj_jwt_cookie=xxxxxxxxxxxxx; expires=Sat, 28 Mar 2020 18:59:00 GMT; HttpOnly; Max-Age=300; Path=/
+JWT_AUTH_COOKIE = 'auth_prj_jwt_cookie'
+JWT_AUTH_REFRESH_COOKIE = 'auth_prj_refresh_jwt_cookie'
+
+# SIMPLE_JWT
+ACCESS_TOKEN_LIFETIME= timedelta(minutes=5)
+REFRESH_TOKEN_LIFETIME= timedelta(days=1)
+
