@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/auth_src.iml" filepath="$PROJECT_DIR$/.idea/auth_src.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../web_client/web_client_src/.idea/web_client_src.iml" filepath="$PROJECT_DIR$/../../web_client/web_client_src/.idea/web_client_src.iml" />
     </modules>
   </component>
 </project>
