@@ -25,7 +25,7 @@ env = environ.Env(
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
@@ -36,8 +36,6 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-spma4y1jjwehd@h&0@aq7+$pf+f-2=p+!q8qxitoexg^%8q9n_'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -94,18 +92,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'auth_prj.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -189,19 +175,9 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
-
-# django-cors-headers settings
-CORS_ALLOWED_ORIGINS = [
-    env('CORS_ALLOWED_ORIGIN_01'),
-    env('CORS_ALLOWED_ORIGIN_02'),
-]
-
 # django-allauth settings
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"  # "mandatory" in production
 ACCOUNT_USERNAME_MIN_LENGTH = 1
 ACCOUNT_USERNAME_REQUIRED = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
