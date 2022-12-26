@@ -150,6 +150,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID = 1
 
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`. This is the only backend by default
+    "django.contrib.auth.backends.ModelBackend",
+    # The following allauth setting needs to be present in order for allauth authentication to work properly.
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend"
+)
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # It gets the jwt from the request header
@@ -159,6 +167,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+LOGIN_URL = 'rest_framework:login'
 
 # DJ_REST_AUTH settings
 REST_USE_JWT = True
@@ -185,3 +195,13 @@ CORS_ALLOWED_ORIGINS = [
     env('CORS_ALLOWED_ORIGIN_01'),
     env('CORS_ALLOWED_ORIGIN_02'),
 ]
+
+# django-allauth settings
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"  # "mandatory" in production
+ACCOUNT_USERNAME_MIN_LENGTH = 1
+ACCOUNT_USERNAME_REQUIRED = False
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
