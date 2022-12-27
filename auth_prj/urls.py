@@ -26,9 +26,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     path('', debug.default_urlconf),
     path('admin/', admin.site.urls),
-    # I use the api/auth/ in front of /token/ to have all endpoints under /api/auth/
-    # This path though, is not included in the dj_rest_auth.urls so, I add it in front it to be matched first
-    path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     # the refresh and verify endpoints are included in the dj_rest_auth urls by default if setting REST_USE_JWT is True
