@@ -149,7 +149,7 @@ REST_FRAMEWORK = {
         # It gets the jwt from the request header
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         # It gets the jwt from the request cookie
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        # 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
@@ -160,8 +160,13 @@ LOGIN_URL = 'rest_framework:login'
 REST_USE_JWT = True
 # these settings cause dj-rest-auth to return a Set-Cookie header to set the JWT cookies
 # Set-Cookie: auth_prj_jwt_cookie=xxxxxxxxxxxxx; expires=Sat, 28 Mar 2020 18:59:00 GMT; HttpOnly; Max-Age=300; Path=/
-JWT_AUTH_COOKIE = 'auth_prj_jwt_cookie'
-JWT_AUTH_REFRESH_COOKIE = 'auth_prj_refresh_jwt_cookie'
+# Have in mind that if you use a cookie to store the JWT you need to add CSRF protection. This means that you need to
+# implement a "csrf get" endpoint. 
+# JWT_AUTH_COOKIE = 'auth_prj_jwt_cookie'
+# JWT_AUTH_REFRESH_COOKIE = 'auth_prj_refresh_jwt_cookie'
+# JWT_AUTH_SAMESITE = 'Lax'
+# JWT_AUTH_COOKIE_USE_CSRF = True
+# JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED = True
 
 # SIMPLE_JWT settings
 ACCESS_TOKEN_LIFETIME = timedelta(minutes=5)
