@@ -26,6 +26,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     path('', debug.default_urlconf),
     path('admin/', admin.site.urls),
+    # The api/auth/token/ endpoint is not used by the login view of the dj-rest-auth app, which uses directly the
+    # serializer from JWT_TOKEN_CLAIMS_SERIALIZER setting to get the token. This endpoint is only used
+    # if you want to get a token by calling it directly.
+    path('api/auth/token/', include('auth_app.urls', namespace='auth_app')),
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     # the refresh and verify endpoints are included in the dj_rest_auth urls by default if setting REST_USE_JWT is True
