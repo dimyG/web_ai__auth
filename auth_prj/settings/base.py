@@ -39,6 +39,42 @@ rabbitmq_host = env('RABBITMQ_HOST')
 
 AUTH_USER_MODEL = 'auth_app.User'
 
+LOGGER_NAME: str = "auth"
+LOG_LEVEL: str = "DEBUG"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} | {asctime} | {name} | {message}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'formatter': 'simple',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+        LOGGER_NAME: {
+            'handlers': ['console'],
+            "level": LOG_LEVEL,
+        },
+    },
+}
+
 # Application definition
 
 INSTALLED_APPS = [
