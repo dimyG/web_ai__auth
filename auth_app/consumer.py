@@ -23,27 +23,31 @@ class ConsumerThread(threading.Thread):
     def exchange_type(self):
         return exchanges.get(self.exchange_name)
 
-    def get_rabbitmq_channel(self):
-        logger.debug(f'ConsumerThread connecting to rabbitmq host: {rabbitmq_host} exchange: {self.exchange_name} queue: {self.queue_name}')
-
+    @staticmethod
+    def connect():
         num_retries = 0
-        while num_retries < 5:
+        limit = 5
+        delay = 6
+        while num_retries < limit:
             try:
                 connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
                 logger.debug(f'connection established')
-                break
+                return connection
             except Exception as e:
                 # when rabbitmq is not yet up and running we get a StreamLostError exception. We retry to connect.
-                delay = 6
                 logger.warning(f'{e}, retrying to connect to rabbitmq host: {rabbitmq_host} in {delay} seconds')
                 time.sleep(delay)
                 num_retries += 1
-                # connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+        raise Exception(f'Could not connect to rabbitmq host: {rabbitmq_host}')
 
+    def get_rabbitmq_channel(self):
+        logger.debug(f'ConsumerThread connecting to rabbitmq host: {rabbitmq_host} exchange: {self.exchange_name} queue: {self.queue_name}')
+
+        connection = self.connect()
         channel = connection.channel()
         logger.debug(f'channel created')
         channel.exchange_declare(exchange=self.exchange_name, exchange_type=self.exchange_type(), durable=True)
-        logger.debug(f'exchange declared {self.exchange_name} {self.exchange_type()}')
+        logger.debug(f'exchange declared')
         result = channel.queue_declare(queue=self.queue_name, exclusive=True, durable=True)
         logger.debug(f'queue declared')
         # queue_name = result.method.queue
@@ -61,11 +65,14 @@ class ConsumerThread(threading.Thread):
         # inactivity_timeout yields None whenever it's inactive for N secs. This way even if there are no messages
         # the channel.consume generator will yield None, the loop will run and the stop "command" will stop the thread.
         # channel.basic_consume(queue=args.queue, on_message_callback=queue_callback, auto_ack=True)
-        for message in channel.consume(self.queue_name, inactivity_timeout=2):
+        # Notice that this way messages are received by the given interval. So you might have a max delay of
+        # "interval" seconds between message production and consumption.
+        interval = 2
+        for message in channel.consume(self.queue_name, inactivity_timeout=interval):
             if self._is_interrupted:
                 break
             if not all(message):
-                logger.debug(f"message received: {message} (None, None, None) - inactivity_timeout")
+                # logger.debug(f"message received: {message} (None, None, None) - inactivity_timeout")
                 continue
             method, properties, body = message
             logger.debug(f"message received: {method} {properties} {body}")
