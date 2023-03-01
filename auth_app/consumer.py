@@ -1,9 +1,11 @@
 import threading
 import pika
+import json
 from pika.exceptions import StreamLostError
 import time
 from auth_prj.settings import rabbitmq_host
 import logging
+from django.contrib.auth import get_user_model
 
 logger = logging.getLogger('auth')
 
@@ -75,8 +77,19 @@ class ConsumerThread(threading.Thread):
                 # logger.debug(f"message received: {message} (None, None, None) - inactivity_timeout")
                 continue
             method, properties, body = message
-            logger.debug(f"message received: {method} {properties} {body}")
-            channel.basic_ack(method.delivery_tag)
+            self.on_message_callback(channel, method, properties, body)
+
+    @staticmethod
+    def on_message_callback(ch, method, properties, body):
+        logger.debug(f"message received: {method} {properties} {body}")
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        body = json.loads(body.decode('utf-8'))
+        # payment_id = body["id"]
+        user_id = body.get("user_id")
+        user = get_user_model().objects.get(id=user_id)
+        from .models import Tiers  # AppRegistryNotReady apps aren't loaded exception if imported at the top
+        user.tier = Tiers.premium
+        user.save()
 
 
 def start_consumer_thread(exchange_name: str, queue_name: str):
