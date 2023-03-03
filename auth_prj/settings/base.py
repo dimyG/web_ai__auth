@@ -34,7 +34,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY_DEVEL')
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 rabbitmq_host = env('RABBITMQ_HOST')
 
 AUTH_USER_MODEL = 'auth_app.User'
