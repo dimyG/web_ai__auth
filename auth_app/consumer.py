@@ -50,7 +50,7 @@ class ConsumerThread(threading.Thread):
         logger.debug(f'channel created')
         channel.exchange_declare(exchange=self.exchange_name, exchange_type=self.exchange_type(), durable=True)
         logger.debug(f'exchange declared')
-        result = channel.queue_declare(queue=self.queue_name, exclusive=True, durable=True)
+        result = channel.queue_declare(queue=self.queue_name, exclusive=False, durable=True) # exclusive=False, so that many consumers can consume from the same queue
         logger.debug(f'queue declared')
         # queue_name = result.method.queue
         channel.queue_bind(exchange=self.exchange_name, queue=self.queue_name)
