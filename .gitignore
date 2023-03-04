@@ -254,3 +254,4 @@ fabric.properties
 # ---- end of jetbrains.gitignore content ----
 
 aws_ecs_container/auth_task.json
+*.env

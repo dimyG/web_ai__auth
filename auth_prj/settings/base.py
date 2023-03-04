@@ -36,6 +36,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 rabbitmq_host = env('RABBITMQ_HOST')
+postgres_host = env('POSTGRES_HOST')
+postgres_psw = env('POSTGRES_PSW')
 
 AUTH_USER_MODEL = 'auth_app.User'
 
@@ -112,6 +114,17 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'auth_prj.urls'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'auth_prj',
+        'HOST': postgres_host,
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': postgres_psw
+    }
+}
 
 TEMPLATES = [
     {
