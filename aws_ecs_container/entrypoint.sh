@@ -18,7 +18,7 @@
 set -e
 
 # the main command to run when the container starts.
-gunicorn auth_prj.wsgi --bind 0.0.0.0:8000 --timeout 60
+gunicorn auth_prj.wsgi --bind 0.0.0.0:8000 --log-level info --capture-output --timeout 60
 
 # It basically takes all the extra command line arguments and execs them as a command. The intention is basically
 # "Do everything in this .sh script, then in the same shell run the command the user passes in on the command line".

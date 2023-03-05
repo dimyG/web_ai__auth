@@ -18,7 +18,8 @@
 set -e
 
 # the main command to run when the container starts.
-python manage.py runserver 0.0.0.0:8000
+#python manage.py runserver 0.0.0.0:8000
+gunicorn auth_prj.wsgi --bind 0.0.0.0:8000 --log-level debug --capture-output --timeout 60 --reload
 
 # It basically takes all the extra command line arguments and execs them as a command. The intention is basically
 # "Do everything in this .sh script, then in the same shell run the command the user passes in on the command line".
