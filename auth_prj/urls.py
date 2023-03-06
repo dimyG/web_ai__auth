@@ -22,10 +22,12 @@ from rest_framework_simplejwt.views import (
 )
 from django.views import debug
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from auth_app.views import HealthCheckView
 
 urlpatterns = [
     path('', debug.default_urlconf),
     path('admin/', admin.site.urls),
+    path('api/auth/healthcheck/', HealthCheckView.as_view(), name='healthcheck'),
     # The api/auth/token/ endpoint is not used by the login view of the dj-rest-auth app, which uses directly the
     # serializer from JWT_TOKEN_CLAIMS_SERIALIZER setting to get the token. This endpoint is only used
     # if you want to get a token by calling it directly.
@@ -37,9 +39,9 @@ urlpatterns = [
     # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # it serves a yaml file with the schema of the API
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/auth/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
-    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('api/auth/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/auth/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
 ]
