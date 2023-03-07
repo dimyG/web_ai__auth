@@ -17,9 +17,11 @@
 # The script will return with the exit code of the failing command.
 set -e
 
-# the main command to run when the container starts.
+python manage.py start_consumer_thread &  # the & makes the command to run in the background so that it doesn't block the script
+export CONSUMER_THREAD_PID=$! # the $! variable contains the return value of the most recently executed background process
+echo "Consumer thread started with PID: $CONSUMER_THREAD_PID"
 #python manage.py runserver 0.0.0.0:8000
-gunicorn auth_prj.wsgi --bind 0.0.0.0:8000 --log-level debug --capture-output --timeout 60 --reload
+gunicorn auth_prj.wsgi --bind 0.0.0.0:8000 --log-level info --capture-output --timeout 60 --reload
 
 # It basically takes all the extra command line arguments and execs them as a command. The intention is basically
 # "Do everything in this .sh script, then in the same shell run the command the user passes in on the command line".

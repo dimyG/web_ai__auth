@@ -11,6 +11,8 @@ class AuthAppConfig(AppConfig):
     name = 'auth_app'
 
     def ready(self):
+        # Notice: When running under gunicorn this RUN_MAIN environment variable is not set and the thread
+        # starts with an external command in the entrypoint.sh file.
         if os.environ.get('RUN_MAIN'):
             # The `RUN_MAIN` environment variable is a private API, not something that
             # should be used or overwritten by users.

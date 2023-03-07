@@ -61,7 +61,7 @@ class ConsumerThread(threading.Thread):
         self._is_interrupted = True
 
     def run(self):
-        logger.debug(f'ConsumerThread started for exchange {self.exchange_name} queue: {self.queue_name}')
+        logger.info(f'ConsumerThread started for exchange {self.exchange_name} queue: {self.queue_name}')
         channel = self.get_rabbitmq_channel()
         # we use channel.consume() and a loop instead of channel.start_consuming() to be able to interrupt the thread.
         # inactivity_timeout yields None whenever it's inactive for N secs. This way even if there are no messages
@@ -94,8 +94,8 @@ class ConsumerThread(threading.Thread):
 
 def start_consumer_thread(exchange_name: str, queue_name: str):
     thread = ConsumerThread(exchange_name=exchange_name, queue_name=queue_name)
-    thread.start()
     threads.append(thread)
+    thread.start()
     return thread
 
 def stop_consumer_thread(thread: ConsumerThread):

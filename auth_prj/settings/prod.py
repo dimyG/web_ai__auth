@@ -4,6 +4,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+# todo: set up a custom domain name for the API Gateway and remove the CORS
 # if we need to allow calls from other domains we should include the corsheaders app
 # INSTALLED_APPS.remove('corsheaders')
 # MIDDLEWARE.remove('corsheaders.middleware.CorsMiddleware')
