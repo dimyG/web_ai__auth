@@ -3,7 +3,7 @@ import pika
 import json
 from pika.exceptions import StreamLostError
 import time
-from auth_prj.settings import rabbitmq_host
+from auth_prj.settings import rabbitmq_host, rabbitmq_port
 import logging
 from django.contrib.auth import get_user_model
 
@@ -32,7 +32,7 @@ class ConsumerThread(threading.Thread):
         delay = 6
         while num_retries < limit:
             try:
-                connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+                connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, port=rabbitmq_port))
                 logger.debug(f'connection established')
                 return connection
             except Exception as e:

@@ -36,6 +36,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 rabbitmq_host = env('RABBITMQ_HOST')
+rabbitmq_port = env('RABBITMQ_PORT')
 postgres_host = env('POSTGRES_HOST')
 postgres_psw = env('POSTGRES_PSW')
 
