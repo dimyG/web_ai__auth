@@ -3,7 +3,8 @@ import pika
 import json
 from pika.exceptions import StreamLostError
 import time
-from auth_prj.settings import rabbitmq_host, rabbitmq_port
+import ssl
+from auth_prj.settings import rabbitmq_host, rabbitmq_port, rabbitmq_broker_id, rabbitmq_user, rabbitmq_psw
 import logging
 from django.contrib.auth import get_user_model
 
@@ -14,6 +15,21 @@ threads = []
 exchanges = {
     'payments': 'fanout',
 }
+
+
+class BasicPikaClient:
+
+    def __init__(self, rabbitmq_broker_id, rabbitmq_user, rabbitmq_psw, region='eu-central-1'):
+        # SSL Context for TLS configuration of Amazon MQ for RabbitMQ
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        ssl_context.set_ciphers('ECDHE+AESGCM:!ECDSA')
+
+        url = f"amqps://{rabbitmq_user}:{rabbitmq_psw}@{rabbitmq_broker_id}.mq.{region}.amazonaws.com:5671"
+        parameters = pika.URLParameters(url)
+        parameters.ssl_options = pika.SSLOptions(context=ssl_context)
+
+        self.connection = pika.BlockingConnection(parameters)
+
 
 class ConsumerThread(threading.Thread):
     def __init__(self, exchange_name: str, queue_name: str):
@@ -26,13 +42,22 @@ class ConsumerThread(threading.Thread):
         return exchanges.get(self.exchange_name)
 
     @staticmethod
-    def connect():
+    def get_connection():
+        # if rabbitmq_broker_id then we are running on AWS and we use different connection settings from running locally.
+        if rabbitmq_broker_id:
+            return BasicPikaClient(rabbitmq_broker_id, rabbitmq_user, rabbitmq_psw).connection
+        else:
+            return pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, port=rabbitmq_port))
+
+    def connect(self):
+        # todo: BlockingConnection has a retry_delay parameter. Use that instead of this custom retry logic.
         num_retries = 0
         limit = 5
         delay = 6
         while num_retries < limit:
             try:
-                connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, port=rabbitmq_port))
+                connection = self.get_connection()
+                # connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, port=rabbitmq_port))
                 logger.debug(f'connection established')
                 return connection
             except Exception as e:

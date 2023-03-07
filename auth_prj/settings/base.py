@@ -34,11 +34,14 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
-rabbitmq_host = env('RABBITMQ_HOST')
-rabbitmq_port = env('RABBITMQ_PORT')
-postgres_host = env('POSTGRES_HOST')
-postgres_psw = env('POSTGRES_PSW')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+rabbitmq_host = os.environ.get('RABBITMQ_HOST')  # used in local env
+rabbitmq_port = os.environ.get('RABBITMQ_PORT')  # used in local env
+rabbitmq_broker_id = os.environ.get('RABBITMQ_BROKER_ID')
+rabbitmq_user = os.environ.get('RABBITMQ_USER')
+rabbitmq_psw = os.environ.get('RABBITMQ_PSW')
+postgres_host = os.environ.get('POSTGRES_HOST')
+postgres_psw = os.environ.get('POSTGRES_PSW')
 
 AUTH_USER_MODEL = 'auth_app.User'
 
