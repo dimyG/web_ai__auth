@@ -227,12 +227,14 @@ REST_AUTH_SERIALIZERS = {
 # JWT_AUTH_COOKIE_USE_CSRF = True
 # JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED = True
 
-# SIMPLE_JWT settings
-ACCESS_TOKEN_LIFETIME = timedelta(minutes=5)
-REFRESH_TOKEN_LIFETIME = timedelta(days=1)
+SIMPLE_JWT = {
+    # SIMPLE_JWT settings
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
+}
 
-# drf-spectacular settings
 SPECTACULAR_SETTINGS = {
+    # drf-spectacular settings
     'TITLE': 'Auth API',
     'DESCRIPTION': 'Authentication and Authorization API',
     'VERSION': '1.0.0',
