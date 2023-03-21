@@ -41,7 +41,7 @@ urlpatterns = [
     # it serves a yaml file with the schema of the API
     path('api/auth/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
-    path('api/auth/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/auth/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/auth/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
 ]
